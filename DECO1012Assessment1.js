@@ -1,34 +1,31 @@
-//Tuesday 3rd Apr
-//jigsaw puzzle flower, starting to test, trying to find out ways to create the jigsaw puzzle look
-//seems like createGraphic is the key. Use createGraphic to render a new canvas, draw onto the new canvas, 
-//then use image() to create sections of the new canvas and place it on the old canvas as needed.
-//Will have to now figure out how to draw different pieces of the puzzle onto the canvas then the drag
-//and drop functionality.
-
 var columns = 3;
 var rows = 2;
 var points = []; 
 var reference = [];
-var columnWidth, rowHeight, img;
+var pieceWidth, pieceHeight, img;
 var jigsaw;
+var square;
+var holdingPiece = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   jigsaw = createGraphics(windowWidth, windowHeight);
-  columnWidth = width/columns; // to feed into PopulatePoints();
-  rowHeight = height/rows;
+  pieceWidth = width/columns; // pieceWidth and pieceHeight will be used to create the coords where the
+  pieceHeight = height/rows;     // jigsaw pieces will be drawn from
   noLoop();
 }
 
 function draw() {
-  PopulatePoints(); //gives the points array the coords where image() will be drawn
+  PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
   DrawCircles(); //for initial testing, will be replaced
+  SawJigs();
+  print(reference);
 }
 
 function PopulatePoints() {
   for(var i=0; i<columns; i++) {
     for(var j=0; j<rows; j++) {
-      var point = [i*columnWidth, j*rowHeight];
+      var point = [i*pieceWidth, j*pieceHeight];
       points.push(point);
     }
   }
@@ -54,11 +51,27 @@ function DrawCircles() {
 function SawJigs() {
   points = shuffle(points);
   for(var i=0; i<reference.length; i++) {
-    image(jigsaw, reference[i][0], reference[i][1], columnWidth, rowHeight,
-          points[i][0], points[i][1], columnWidth, rowHeight);
+    image(jigsaw, reference[i][0], reference[i][1], pieceWidth, pieceHeight,
+          points[i][0], points[i][1], pieceWidth, pieceHeight);
   }
 }
 
 function mouseClicked() {
-  SawJigs();
+  /*if(holdingPiece) {
+    DropPiece();
+  } else {
+    PickupPiece();
+  }*/
+  
+  AreaCheck();
 }
+
+function AreaCheck() {
+  for(var i=0; i<reference.length; i++) {
+    if(mouseX > reference[i][0] && mouseX < reference[i][0]+pieceWidth &&
+       mouseY > reference[i][1] && mouseY < reference[i][1]+pieceHeight) {
+      print("area"+i);
+    }
+  }
+}
+
