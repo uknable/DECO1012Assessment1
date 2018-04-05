@@ -11,4 +11,14 @@ do a click-tile-then-click-tile-to-swap functionality which would be clunkier. A
 Hopefully it won't be too resource demanding.
 
 05/04/2018
-I need to figure out a way to have the different areas of the canvas defined so that the program knows which piece is where. 
+I need to figure out a way to have the different areas of the canvas defined so that the program knows which piece is where. Added 
+jigsaw piece area detection. Implemented functionality to have the player able to pickup a piece.
+Encountered a mind-bending bug when I wasn't able to pick up the first piece. It was because of this code: 
+  if(holdingPiece && clickedPiece) {
+    PickupPiece(clickedPiece);
+  }
+The bug was that if the first piece was clicked then clickedPiece would evaluate was false as clickedPiece held value of 0. 
+Now the code is:
+  if(holdingPiece) {
+    PickupPiece(clickedPiece);
+  }

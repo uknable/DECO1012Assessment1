@@ -4,22 +4,25 @@ var points = [];
 var reference = [];
 var pieceWidth, pieceHeight, img;
 var jigsaw;
-var square;
 var holdingPiece = false;
+var clickedPiece;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   jigsaw = createGraphics(windowWidth, windowHeight);
   pieceWidth = width/columns; // pieceWidth and pieceHeight will be used to create the coords where the
   pieceHeight = height/rows;     // jigsaw pieces will be drawn from
-  noLoop();
-}
-
-function draw() {
   PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
   DrawCircles(); //for initial testing, will be replaced
-  SawJigs();
-  print(reference);
+  DrawJigs();
+}
+
+function draw() { 
+  DrawJigs();
+
+  if(holdingPiece) {
+    PickupPiece(clickedPiece);
+  }
 }
 
 function PopulatePoints() {
@@ -29,8 +32,8 @@ function PopulatePoints() {
       points.push(point);
     }
   }
-  reference = points; //reference array stores correct order of coords, points will be shuffled in SawJigs()
-  print(points);
+  reference = points; //reference array stores correct order of coords
+  points = shuffle(points); //shuffle the pieces
 }
 
 function DrawCircles() {
@@ -44,12 +47,11 @@ function DrawCircles() {
       default:
         jigsaw.fill(0);
     }
-    jigsaw.ellipse(width/2, height/2, k*width/points.length*(frameCount%10));
+    jigsaw.ellipse(width/2, height/2, k*width/points.length);
   }
 }
 
-function SawJigs() {
-  points = shuffle(points);
+function DrawJigs() {
   for(var i=0; i<reference.length; i++) {
     image(jigsaw, reference[i][0], reference[i][1], pieceWidth, pieceHeight,
           points[i][0], points[i][1], pieceWidth, pieceHeight);
@@ -57,21 +59,35 @@ function SawJigs() {
 }
 
 function mouseClicked() {
-  /*if(holdingPiece) {
-    DropPiece();
-  } else {
-    PickupPiece();
-  }*/
-  
-  AreaCheck();
-}
+  clickedPiece = AreaCheck();
 
-function AreaCheck() {
-  for(var i=0; i<reference.length; i++) {
-    if(mouseX > reference[i][0] && mouseX < reference[i][0]+pieceWidth &&
-       mouseY > reference[i][1] && mouseY < reference[i][1]+pieceHeight) {
-      print("area"+i);
-    }
+  if(holdingPiece) {
+    DropPiece(clickedPiece);
+    holdingPiece = false;
+  } else {
+    PickupPiece(clickedPiece);
+    holdingPiece = true;
   }
 }
 
+function AreaCheck() {
+  var whichPiece;
+
+  for(var i=0; i<reference.length; i++) {
+    if(mouseX > reference[i][0] && mouseX < reference[i][0]+pieceWidth &&
+       mouseY > reference[i][1] && mouseY < reference[i][1]+pieceHeight) {
+      whichPiece = i;
+      print(whichPiece);
+    }
+  }
+  return whichPiece;
+}
+
+function PickupPiece(piece) {
+  image(jigsaw, mouseX-pieceWidth/2, mouseY-pieceHeight/2, pieceWidth, pieceHeight,
+        points[piece][0], points[piece][1], pieceWidth, pieceHeight);
+}
+
+function DropPiece(piece) {
+
+}
