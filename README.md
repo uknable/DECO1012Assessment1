@@ -22,3 +22,12 @@ Now the code is:
   if(holdingPiece) {
     PickupPiece(clickedPiece);
   }
+Implemented swapping of the currently held piece with the clicked piece.
+Implemented win condition with help from user palswim for his answer on how to check if two arrays are identical
+	https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
+Implemented placeholder piece
+
+References used:
+https://p5js.org/reference/
+https://www.w3schools.com/jsref/default.asp
+https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way

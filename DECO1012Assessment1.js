@@ -1,27 +1,41 @@
-var columns = 3;
-var rows = 2;
+var columns = 5;
+var rows = 3;
 var points = []; 
 var reference = [];
 var pieceWidth, pieceHeight, img;
 var jigsaw;
-var holdingPiece = false;
-var clickedPiece;
+var placeholderPiece;
+var nowHolding = false;
+var gameEnd = false;
+var clickedPiece, currentPiece;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   jigsaw = createGraphics(windowWidth, windowHeight);
   pieceWidth = width/columns; // pieceWidth and pieceHeight will be used to create the coords where the
   pieceHeight = height/rows;     // jigsaw pieces will be drawn from
+  placeholderPiece = createGraphics(pieceWidth, pieceHeight); //this graphic will replace the puzzle that was picked
   PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
-  DrawCircles(); //for initial testing, will be replaced
+  DrawPlaceholder();
+  DrawFlower(); //for initial testing, will be replaced
   DrawJigs();
 }
 
 function draw() { 
   DrawJigs();
 
-  if(holdingPiece) {
+  if(nowHolding) {
     PickupPiece(clickedPiece);
+  }
+
+  MouseType();
+}
+
+function MouseType() {
+  if(nowHolding) {
+    cursor(MOVE);
+  } else {
+    cursor(HAND);
   }
 }
 
@@ -36,7 +50,11 @@ function PopulatePoints() {
   points = shuffle(points); //shuffle the pieces
 }
 
-function DrawCircles() {
+function DrawPlaceholder() {
+  placeholderPiece.background(100);
+}
+
+function DrawFlower() {
   jigsaw.background(0);
   jigsaw.noStroke();
   for(var k=points.length; k>0; k--) {
@@ -61,12 +79,14 @@ function DrawJigs() {
 function mouseClicked() {
   clickedPiece = AreaCheck();
 
-  if(holdingPiece) {
-    DropPiece(clickedPiece);
-    holdingPiece = false;
+  if(nowHolding) {
+    SwapPiece(clickedPiece);
+    nowHolding = false;
   } else {
     PickupPiece(clickedPiece);
-    holdingPiece = true;
+    currentPiece = clickedPiece;
+    nowHolding = true;
+
   }
 }
 
@@ -83,11 +103,28 @@ function AreaCheck() {
   return whichPiece;
 }
 
-function PickupPiece(piece) {
+function PickupPiece(piece) {  
+  image(placeholderPiece, reference[piece][0], reference[piece][1], pieceWidth, pieceHeight,
+        0, 0, pieceWidth, pieceHeight);
   image(jigsaw, mouseX-pieceWidth/2, mouseY-pieceHeight/2, pieceWidth, pieceHeight,
         points[piece][0], points[piece][1], pieceWidth, pieceHeight);
 }
 
-function DropPiece(piece) {
+function SwapPiece(piece) {
+  var swapZone;
+  swapZone = points[piece];
+  points[piece] = points[currentPiece];
+  points[currentPiece] = swapZone;
+  CheckWinCondition(); //check if player finished puzzle;
+}
 
+function CheckWinCondition() {
+  for(var i=0; i<points.length; i++) {
+    if(points[i] != reference[i]) {
+      gameEnd = false;
+      return; //gets out of the function if a piece is not in the right spot
+    }
+  }
+  gameEnd = true;
+  print(gameEnd);
 }
