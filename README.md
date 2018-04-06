@@ -26,8 +26,11 @@ Implemented swapping of the currently held piece with the clicked piece.
 Implemented win condition with help from user palswim for his answer on how to check if two arrays are identical
 	https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
 Implemented placeholder piece
+Now I need to work on the spinning flower. I want the petals to be wavey. The key lies in the 'Noise Wave Array' example from
+week 3 (https://www.openprocessing.org/sketch/520719).
 
 References used:
 https://p5js.org/reference/
 https://www.w3schools.com/jsref/default.asp
 https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
+https://www.openprocessing.org/sketch/520719

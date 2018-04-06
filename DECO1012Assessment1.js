@@ -1,8 +1,8 @@
-var columns = 5;
-var rows = 3;
+var columns = 3;
+var rows = 2;
 var points = []; 
 var reference = [];
-var pieceWidth, pieceHeight, img;
+var pieceWidth, pieceHeight;
 var jigsaw;
 var placeholderPiece;
 var nowHolding = false;
@@ -17,11 +17,10 @@ function setup() {
   placeholderPiece = createGraphics(pieceWidth, pieceHeight); //this graphic will replace the puzzle that was picked
   PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
   DrawPlaceholder();
-  DrawFlower(); //for initial testing, will be replaced
-  DrawJigs();
 }
 
 function draw() { 
+  DrawFlower();
   DrawJigs();
 
   if(nowHolding) {
@@ -47,25 +46,32 @@ function PopulatePoints() {
     }
   }
   reference = points; //reference array stores correct order of coords
-  points = shuffle(points); //shuffle the pieces
+  points = shuffle(points); //shuffle the pieces, commented out for testing graphic
 }
 
 function DrawPlaceholder() {
   placeholderPiece.background(100);
 }
 
-function DrawFlower() {
-  jigsaw.background(0);
-  jigsaw.noStroke();
-  for(var k=points.length; k>0; k--) {
-    switch (k%2) {
+function DrawFlower() { //test graphic
+  //jigsaw.noStroke();
+  jigsaw.background(255);/*
+  for(var i=points.length; i>0; i--) {
+    switch (i%2) {
       case 0:
         jigsaw.fill(255);
         break;
       default:
         jigsaw.fill(0);
+        break;
     }
-    jigsaw.ellipse(width/2, height/2, k*width/points.length);
+    jigsaw.ellipse(width/2, height/2, i*width/points.length);
+  }*/
+  jigsaw.strokeWeight(5);
+  for(var i=0; i<height; i+=20) {
+    for(var j=0; j<width; j+=20) {
+      jigsaw.point(j+(frameCount%pieceWidth), i);
+    }
   }
 }
 
@@ -86,7 +92,6 @@ function mouseClicked() {
     PickupPiece(clickedPiece);
     currentPiece = clickedPiece;
     nowHolding = true;
-
   }
 }
 
