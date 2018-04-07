@@ -1,5 +1,5 @@
-var columns = 3;
-var rows = 2;
+var columns = 1;
+var rows = 1;
 var points = []; 
 var reference = [];
 var pieceWidth, pieceHeight;
@@ -8,6 +8,17 @@ var placeholderPiece;
 var nowHolding = false;
 var gameEnd = false;
 var clickedPiece, currentPiece;
+//flower
+var petals = 14;
+var angleSlice;
+//array for petal verticies
+var pointsFeet = [];
+var pointsShoulders = [];
+var pointsHead = [];
+//for noise
+var xoff = 0;
+var yoff = 0;
+var noiseVar;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -17,19 +28,96 @@ function setup() {
   placeholderPiece = createGraphics(pieceWidth, pieceHeight); //this graphic will replace the puzzle that was picked
   PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
   DrawPlaceholder();
+  angleSlice = radians(360/petals);
 }
 
 function draw() { 
-  DrawFlower();
+  jigsaw.background(255);
+  GenerateFlower();
   DrawJigs();
 
   if(nowHolding) {
     PickupPiece(clickedPiece);
   }
+  MouseType(); 
 
-  MouseType();
 }
 
+//the flower
+function GenerateFlower() {
+  xoff = xoff + 0.005;
+  FlowerPoints();
+  push();
+  jigsaw.noStroke();
+  FlowerPetals();
+  pop();
+}
+
+function FlowerPoints() {
+  pointsFeet = [];
+  pointsShoulders = [];
+  pointsHead = [];
+
+  //petal shape
+  var feet = 400; 
+  var shoulders = 1000; 
+  var head = 1500; 
+
+  for(var i=0; i<petals; i++) {
+    var angle = angleSlice * i + (frameCount * map(noise(xoff), 0, 1, 0, 0.01));
+    //petal feet
+    var x1 = map(cos(angle), -1, 1, -feet, feet)+width*2;
+    var y1 = map(sin(angle), -1, 1, -feet, feet)+height*2;
+    //petal shoulders
+    var x2 = map(cos(angle), -1, 1, -shoulders, shoulders)+width*2;
+    var y2 = map(sin(angle), -1, 1, -shoulders, shoulders)+height*2;
+    //petal head
+    var angleTip = angle + angleSlice/2;
+    var x3 = map(cos(angleTip), -1, 1, -head, head)+width*2;
+    var y3 = map(sin(angleTip), -1, 1, -head, head)+height*2;
+
+    pointsFeet.push([x1, y1]);
+    pointsShoulders.push([x2, y2]);
+    pointsHead.push([x3, y3]);
+  }
+}
+
+function FlowerPetals() {  
+  for(var i=0; i<pointsFeet.length; i++) {
+    yoff = noise(xoff, i*2);
+    noiseVar = map(noise(xoff, yoff), 0, 1, 0, 0.4);
+    jigsaw.fill(255*yoff);
+    switch (i) {
+      case (pointsFeet.length-1):
+        DrawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
+                  pointsShoulders[i][0]*noiseVar, pointsShoulders[i][1]*noiseVar,
+                  pointsHead[i][0]*noiseVar, pointsHead[i][1]*noiseVar,
+                  pointsShoulders[0][0]*noiseVar, pointsShoulders[0][1]*noiseVar,
+                  pointsFeet[0][0]*noiseVar, pointsFeet[0][1]*noiseVar);
+        break;
+      default:
+        DrawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
+                  pointsShoulders[i][0]*noiseVar, pointsShoulders[i][1]*noiseVar,
+                  pointsHead[i][0]*noiseVar, pointsHead[i][1]*noiseVar,
+                  pointsShoulders[i+1][0]*noiseVar, pointsShoulders[i+1][1]*noiseVar,
+                  pointsFeet[i+1][0]*noiseVar, pointsFeet[i+1][1]*noiseVar);
+        break;
+    }
+  }
+}
+
+function DrawPetal(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5) {
+  
+  jigsaw.beginShape();
+  jigsaw.vertex(x1, y1);
+  jigsaw.vertex(x2, y2);
+  jigsaw.vertex(x3, y3);
+  jigsaw.vertex(x4, y4);
+  jigsaw.vertex(x5, y5);
+  jigsaw.endShape();
+}
+
+//the game
 function MouseType() {
   if(nowHolding) {
     cursor(MOVE);
@@ -51,28 +139,6 @@ function PopulatePoints() {
 
 function DrawPlaceholder() {
   placeholderPiece.background(100);
-}
-
-function DrawFlower() { //test graphic
-  //jigsaw.noStroke();
-  jigsaw.background(255);/*
-  for(var i=points.length; i>0; i--) {
-    switch (i%2) {
-      case 0:
-        jigsaw.fill(255);
-        break;
-      default:
-        jigsaw.fill(0);
-        break;
-    }
-    jigsaw.ellipse(width/2, height/2, i*width/points.length);
-  }*/
-  jigsaw.strokeWeight(5);
-  for(var i=0; i<height; i+=20) {
-    for(var j=0; j<width; j+=20) {
-      jigsaw.point(j+(frameCount%pieceWidth), i);
-    }
-  }
 }
 
 function DrawJigs() {
