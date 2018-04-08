@@ -1,4 +1,4 @@
-var columns = 1;
+var columns = 2;
 var rows = 1;
 var points = []; 
 var reference = [];
@@ -93,15 +93,14 @@ function FlowerPoints() {
 
 function FlowerPetals() {  
   for(var i=0; i<pointsFeet.length; i++) {
-    yoff = noise(xoff, i*2);
-    var noiseyColour = 255*yoff;
     //creates different flower if puzzle is completed
     if (gameEnd == false) {
+      yoff = noise(xoff, i*2);
       noiseVar = map(noise(xoff, yoff), 0, 1, -0.15, 0.45);
-      jigsaw.fill(noiseyColour);
+      jigsaw.fill(255*yoff);
     } else {
       noiseVar = 0.2;
-      jigsaw.fill(255-20*i, 255-10*i, 255-5*i);
+      jigsaw.fill(255-10*i, 255-30*i, 255-50*i);
     }
 
     switch (i) {

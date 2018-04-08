@@ -46,6 +46,12 @@ Discarded the shards as it wouldn't look good with the new flower pattern. Worki
 Will leave tomorrow with the completed puzzle flower and bug fixing. If neccessary I will add colour to the current graphic
 and hand that in.
 
+08/04/2018
+I need something to help the player work out the outer squares. Working on shards. They will appear from the top left and move toward
+the bottom or right side of the screen.
+Scrapped the idea of the shards. Just made flower bigger. 
+
+
 References used:
 https://p5js.org/reference/
 https://www.w3schools.com/jsref/default.asp
