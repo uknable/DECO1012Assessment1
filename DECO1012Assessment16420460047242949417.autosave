@@ -1,5 +1,5 @@
 var columns = 2;
-var rows = 1;
+var rows = 2;
 var points = []; 
 var reference = [];
 var pieceWidth, pieceHeight;
@@ -21,7 +21,7 @@ var yoff = 0;
 var noiseVar;
 //for puzzle complete
 var counter = 0;
-var noiseArray = [];
+var noiseSnapshot;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -98,24 +98,23 @@ function FlowerPetals() {
   for(var i=0; i<pointsFeet.length; i++) {
     yoff = noise(xoff, i*2);
     var noiseyColour = color(255*yoff, 255*yoff, 255*yoff);
-
     //creates different flower if puzzle is completed
+
     if (gameEnd == false) {
       counter = 0;
-      jigsaw.fill(noiseyColour);
       noiseVar = map(noise(xoff, yoff), 0, 1, -0.15, 0.45);
-      noiseArray[i] = noiseVar;
+      jigsaw.fill(noiseyColour);
     } else {
       counter++;
-      //lerps colour
       var currentLerp = map(counter, 0, 4000, 0, 1);
+      //lerps colour
       var colourTo = color(235-20*i, 245-10*i, 255-5*i);
       var currentColour = lerpColor(noiseyColour, colourTo, currentLerp);
-      jigsaw.fill(currentColour);
       //lerps petal position
       var noiseVarTo = 0.2;
-      var noiseSnapshot = noiseVar;
-      noiseVar = lerp(noiseArray[i], noiseVarTo, currentLerp);
+      currentLerp = map(counter, 0, 1000000, 0, 1);
+      noiseVar = lerp(noiseVar, noiseVarTo, currentLerp);
+      jigsaw.fill(currentColour);
     }
 
     switch (i) {
