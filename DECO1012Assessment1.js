@@ -65,8 +65,8 @@ function setup() {
   pieceWidth = width/columns; // pieceWidth and pieceHeight will be used to create the coords where the jigsaw pieces will be drawn from
   pieceHeight = height/rows;  
   placeholderPiece = createGraphics(pieceWidth, pieceHeight); //this graphic will replace the puzzle that was picked
-  PopulatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
-  DrawPlaceholder();
+  populatePoints(); //gives the points array the coords where jigsaw pieces will be drawn
+  drawPlaceholder();
   angleSlice = radians(360/petals);
   jigsaw.noStroke();
 }
@@ -74,15 +74,15 @@ function setup() {
 function draw() { 
   jigsaw.background(255);
 
-  GenerateFlower();
-  DrawJigs(); //draws the jigsaw pieces on the canvas
+  generateFlower();
+  drawJigs(); //draws the jigsaw pieces on the canvas
 
   if(nowHolding) { //sets piece to cursor if a piece is currently picked up
-    PickupPiece(clickedPiece);
+    pickupPiece(clickedPiece);
   }
 
-  MouseType(); //switches between cursors if a piece is currently being held
-  UI(); //to show instructions
+  mouseType(); //switches between cursors if a piece is currently being held
+  ui(); //to show instructions
 }
 
 function windowResized() {
@@ -90,13 +90,13 @@ function windowResized() {
 }
 
 //the flower
-function GenerateFlower() {
+function generateFlower() {
   xoff = xoff + 0.005;
-  FlowerPoints(); //populates array which FlowerPetals will use to draw the individual petals
-  FlowerPetals(); //draws the individual petals
+  flowerPoints(); //populates array which flowerPetals will use to draw the individual petals
+  flowerPetals(); //draws the individual petals
 }
 
-function FlowerPoints() {
+function flowerPoints() {
   pointsFeet = [];
   pointsShoulders = [];
   pointsHead = [];
@@ -127,7 +127,7 @@ function FlowerPoints() {
   }
 }
 
-function FlowerPetals() {  
+function flowerPetals() {  
   for(var i=0; i<pointsFeet.length; i++) {
     yoff = noise(xoff, i*2);
     var noiseyColour = color(255*yoff, 255*yoff, 255*yoff);
@@ -160,14 +160,14 @@ function FlowerPetals() {
     //of a petal relies on the petal next to it
     switch (i) { 
       case (pointsFeet.length-1):
-        DrawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
+        drawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
                   pointsShoulders[i][0]*noiseVar, pointsShoulders[i][1]*noiseVar,
                   pointsHead[i][0]*noiseVar, pointsHead[i][1]*noiseVar,
                   pointsShoulders[0][0]*noiseVar, pointsShoulders[0][1]*noiseVar,
                   pointsFeet[0][0]*noiseVar, pointsFeet[0][1]*noiseVar);
         break;
       default:
-        DrawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
+        drawPetal(pointsFeet[i][0]*noiseVar, pointsFeet[i][1]*noiseVar,
                   pointsShoulders[i][0]*noiseVar, pointsShoulders[i][1]*noiseVar,
                   pointsHead[i][0]*noiseVar, pointsHead[i][1]*noiseVar,
                   pointsShoulders[i+1][0]*noiseVar, pointsShoulders[i+1][1]*noiseVar,
@@ -178,7 +178,7 @@ function FlowerPetals() {
 }
 //I was going to use this function to create petals that would fall from one corner of the screen to the other but that idea was
 //scrapped as it didn't look too good
-function DrawPetal(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5) {
+function drawPetal(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5) {
   
   jigsaw.beginShape();
   jigsaw.vertex(x1, y1);
@@ -190,7 +190,7 @@ function DrawPetal(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5) {
 }
 
 //the game
-function MouseType() {
+function mouseType() {
   if(nowHolding) {
     cursor(MOVE);
   } else {
@@ -198,7 +198,7 @@ function MouseType() {
   }
 }
 
-function PopulatePoints() { //creates the coords for the jigsaw
+function populatePoints() { //creates the coords for the jigsaw
   for(var i=0; i<columns; i++) {
     for(var j=0; j<rows; j++) {
       var point = [i*pieceWidth, j*pieceHeight];
@@ -209,11 +209,11 @@ function PopulatePoints() { //creates the coords for the jigsaw
   points = shuffle(points); //shuffle the jigsaw pieces
 }
 
-function DrawPlaceholder() { //this is to replace the piece that was picked up
+function drawPlaceholder() { //this is to replace the piece that was picked up
   placeholderPiece.background(100);
 }
 
-function DrawJigs() { //uses the correct coords and pastes the pieces reflected from the shuffled coords
+function drawJigs() { //uses the correct coords and pastes the pieces reflected from the shuffled coords
   for(var i=0; i<reference.length; i++) {
     image(jigsaw, reference[i][0], reference[i][1], pieceWidth, pieceHeight,
           points[i][0], points[i][1], pieceWidth, pieceHeight);
@@ -221,19 +221,19 @@ function DrawJigs() { //uses the correct coords and pastes the pieces reflected 
 }
 
 function mouseClicked() { //if mouse is clicked, pick up piece if not holding or drop if holding
-  clickedPiece = AreaCheck();
+  clickedPiece = areaCheck();
 
   if(nowHolding) {
-    SwapPiece(clickedPiece);
+    swapPiece(clickedPiece);
     nowHolding = false;
   } else {
-    PickupPiece(clickedPiece);
+    pickupPiece(clickedPiece);
     currentPiece = clickedPiece;
     nowHolding = true;
   }
 }
 
-function AreaCheck() { //checks and returns what area on the canvas you clicked on
+function areaCheck() { //checks and returns what area on the canvas you clicked on
   var whichPiece;
 
   for(var i=0; i<reference.length; i++) { //the canvas area of each piece
@@ -245,32 +245,32 @@ function AreaCheck() { //checks and returns what area on the canvas you clicked 
   return whichPiece;
 }
 
-function PickupPiece(piece) {  //puts the grey placeholder graphic on the area you clicked on and puts the piece on your cursor
+function pickupPiece(piece) {  //puts the grey placeholder graphic on the area you clicked on and puts the piece on your cursor
   image(placeholderPiece, reference[piece][0], reference[piece][1], pieceWidth, pieceHeight,
         0, 0, pieceWidth, pieceHeight);
   image(jigsaw, mouseX-pieceWidth/2, mouseY-pieceHeight/2, pieceWidth, pieceHeight,
         points[piece][0], points[piece][1], pieceWidth, pieceHeight);
 }
 
-function SwapPiece(piece) { //swaps the piece you're holding with the piece you clicked on, checks if you finished
+function swapPiece(piece) { //swaps the piece you're holding with the piece you clicked on, checks if you finished
   var swapZone;
   swapZone = points[piece];
   points[piece] = points[currentPiece];
   points[currentPiece] = swapZone;
-  CheckWinCondition(); //check if player finished puzzle;
+  checkWinCondition(); //check if player finished puzzle;
 }
 
-function CheckWinCondition() { 
+function checkWinCondition() { 
   for(var i=0; i<points.length; i++) {
     if(points[i] != reference[i]) { //checks every coordinate of the shuffled array against reference array, https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
       gameEnd = false;
       return; //gets out of the function if a piece is not in the right spot
     }
   }
-  gameEnd = true; //used in the GenerateFlower() function
+  gameEnd = true; //used in the generateFlower() function
 }
 
-function UI() { //instructions
+function ui() { //instructions
   if (gameEnd == false) {
     textSize(15);
     text("Click to pick up a piece", width-200, 20);
