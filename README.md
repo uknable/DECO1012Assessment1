@@ -50,6 +50,7 @@ and hand that in.
 I need something to help the player work out the outer squares. Working on shards. They will appear from the top left and move toward
 the bottom or right side of the screen.
 Scrapped the idea of the shards. Just made flower bigger. 
+When the puzzle completes it will lerp to a specified position and the petals will also colorLerp to certain colours.
 
 
 References used:
