@@ -136,7 +136,7 @@ function FlowerPetals() {
     if (gameEnd == false) {
       counter = 0; //so you can watch the ending animation again if you mess up the puzzle after completion
       jigsaw.fill(noiseyColour); //gives individual petals their own colour
-      noiseVar = map(noise(xoff, yoff), 0, 1, -0.1, 0.3); //change this to vary the position of the petals
+      noiseVar = map(noise(xoff, yoff), 0, 1, -0.1, 0.2); //change this to vary the position of the petals
       noiseArray[i] = noiseVar;
     } else {
       counter++;
@@ -146,14 +146,14 @@ function FlowerPetals() {
       var currentColour = lerpColor(noiseyColour, colourTo, currentLerp);
       jigsaw.fill(currentColour);
       //lerps petal position
-      var noiseVarTo = 0.2;
+      var noiseVarTo = 0.1;
       var noiseSnapshot = noiseVar;
       //I had to introduce the following if-statement to keep the flower in the final position
       //it has to do with counter always incrementing(line 107). Alternatively, I could clamp counter to a specific range
-      if(noiseVar != 0.2) {
+      if(noiseVar != 0.1) {
         noiseVar = lerp(noiseArray[i], noiseVarTo, currentLerp);
       } else {
-        noiseVar = 0.2;
+        noiseVar = 0.1;
       }
     }
     //this switch statement stitches the end of the array to the start of the array which is necessary because each drawing
