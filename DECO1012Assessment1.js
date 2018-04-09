@@ -20,6 +20,8 @@ more interesting.
    Psychological Types (3rd ed., pp. 540). Princeton University Press.
 3. Jung, C., Adler, G., & Hull, R. (2014). Collected Works of C.G. Jung, Volume 6: Psychological Types: 
    Psychological Types (3rd ed., pp. 561-562). Princeton University Press.
+
+Also included github repo for this assessment: https://github.com/uknable/DECO1012Assessment1, https://github.com/uknable/1012Assessment1Flower
 */
 
 //change these to change the amount of pieces on the board
