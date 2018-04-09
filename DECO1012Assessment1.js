@@ -22,12 +22,14 @@ more interesting.
    Psychological Types (3rd ed., pp. 561-562). Princeton University Press.
 
 References used:
-https://p5js.org/reference/
-https://www.w3schools.com/jsref/default.asp
-https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
-https://www.openprocessing.org/sketch/520719
+p5.js | reference. (2018). P5js.org. Retrieved 3-9 April 2018, from https://p5js.org/reference/
+JavaScript and HTML DOM Reference. (2018). W3schools.com. Retrieved 3-9 April 2018, from https://www.w3schools.com/jsref/default.asp
+How to check identical array in most efficient way?. (2010). Stackoverflow.com. Retrieved 5 April 2018, from https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
+Noise Wave Array. (2018). OpenProcessing. Retrieved 6 April 2018, from https://www.openprocessing.org/sketch/520170
 
-Also included github repo for this assessment: https://github.com/uknable/DECO1012Assessment1, https://github.com/uknable/1012Assessment1Flower
+Also included github repo for this assessment: 
+  https://github.com/uknable/DECO1012Assessment1
+  https://github.com/uknable/1012Assessment1Flower
 */
 
 //change these to change the amount of pieces on the board
