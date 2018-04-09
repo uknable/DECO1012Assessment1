@@ -21,6 +21,12 @@ more interesting.
 3. Jung, C., Adler, G., & Hull, R. (2014). Collected Works of C.G. Jung, Volume 6: Psychological Types: 
    Psychological Types (3rd ed., pp. 561-562). Princeton University Press.
 
+References used:
+https://p5js.org/reference/
+https://www.w3schools.com/jsref/default.asp
+https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
+https://www.openprocessing.org/sketch/520719
+
 Also included github repo for this assessment: https://github.com/uknable/DECO1012Assessment1, https://github.com/uknable/1012Assessment1Flower
 */
 
@@ -252,9 +258,9 @@ function SwapPiece(piece) { //swaps the piece you're holding with the piece you 
   CheckWinCondition(); //check if player finished puzzle;
 }
 
-function CheckWinCondition() {
+function CheckWinCondition() { 
   for(var i=0; i<points.length; i++) {
-    if(points[i] != reference[i]) { //checks every coordinate of the shuffled array against reference array
+    if(points[i] != reference[i]) { //checks every coordinate of the shuffled array against reference array, https://stackoverflow.com/questions/4025893/how-to-check-identical-array-in-most-efficient-way
       gameEnd = false;
       return; //gets out of the function if a piece is not in the right spot
     }
